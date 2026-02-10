@@ -164,6 +164,7 @@ In this step, the SageMaker execution role is retrieved using the built-in utili
 
 ```python
 role = get_execution_role()
+```
 
 ![Imagen1](img/Imagen1.png)
 

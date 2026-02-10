@@ -1,6 +1,4 @@
-# TDSE - Exploring Convolutional Layers Through Data and Experiments
-
-## Student name: Santiago Amaya Zapata
+# Exploring Convolutional Layers Through Data and Experiments
 
 ## Problem Description
 
@@ -147,6 +145,62 @@ Convolution is less suitable for:
 
 ---
 
+## Deployment in Amazon SageMaker – Execution Constraints
+
+The deployment stage was designed to be executed using Amazon SageMaker in order to train and deploy the convolutional model in a managed cloud environment.
+
+### Attempted Setup
+
+The following steps were performed:
+
+- Creation of a PyTorch training script (`train.py`) compatible with SageMaker.
+- Initialization of a SageMaker training job using the PyTorch estimator.
+- Manual creation and configuration of an S3 bucket for model artifacts.
+- Explicit specification of the execution role and default S3 bucket.
+
+### Execution Role Configuration
+
+In this step, the SageMaker execution role is retrieved using the built-in utility `get_execution_role()`.
+
+```python
+role = get_execution_role()
+
+![Imagen1](img/Imagen1.png)
+
+
+### Observed Issue
+
+Despite correct configuration, the training job failed during initialization due to connectivity and authorization constraints related to AWS services.  
+Specifically, the environment was unable to establish a connection with AWS STS (Security Token Service) and S3, which are required for role validation and artifact storage.
+
+These services are mandatory for SageMaker training jobs, and their availability depends on account-level permissions and regional infrastructure, which are outside the scope of this assignment.
+
+### Impact on the Assignment
+
+As a result, the model could not be trained or deployed within SageMaker in the available environment.  
+However, this limitation is related to cloud infrastructure access rather than model design, implementation, or architectural reasoning.
+
+The full deployment workflow, configuration steps, and training script are provided to demonstrate understanding of the end-to-end process.
+
+### Justification
+
+This assignment focuses primarily on architectural reasoning, inductive bias, and experimental analysis of convolutional layers.  
+The inability to complete the cloud deployment does not affect the validity of the architectural design or the experimental conclusions presented in the notebook.
+
+In real-world settings, such issues are typically resolved through administrative configuration of IAM roles, service quotas, or network access policies.
+
+### Root Cause Identified in Execution Logs
+
+The training job failed during initialization due to a connectivity issue with AWS Security Token Service (STS).  
+The root cause is explicitly reported in the execution logs:
+
+botocore.exceptions.ConnectTimeoutError: Connect timeout on endpoint URL: "https://sts.us-east-1.amazonaws.com/"
+
+
+STS is a mandatory service for role authentication and access to other AWS resources such as S3.  
+Because the environment was unable to reach STS, SageMaker could not assume the execution role or initialize the training job, causing the deployment process to fail before model training began.
+
+![Imagen2](img/Imagen2.png)
 
 ## Conclusion
 

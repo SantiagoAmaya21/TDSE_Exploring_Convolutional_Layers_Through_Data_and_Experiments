@@ -160,8 +160,11 @@ By introducing inductive bias aligned with image data, CNNs achieve better gener
 
 .
 ├── convolutional_layers.ipynb
+
 ├── train.py
+
 ├── README.md
+
 └── data/
 
 
